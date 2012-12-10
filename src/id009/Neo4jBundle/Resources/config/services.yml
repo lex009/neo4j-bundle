@@ -1,29 +1,29 @@
 parameters:
-	id009_neo4j.entity_manager.class: id009\Neo4jBundle\EntityManager
-	id009_neo4j.proxy_dir: %kernel.cache_dir%/doctrine/neo4j/Proxies
-	id009_neo4j.form.type.neo4j_entity.class: id009\Neo4jBundle\Form\Type\EntityType
-	id009_neo4j.form.type_guesser.class: id009\Neo4jBundle\Form\Neo4jTypeGuesser
-	id009_neo4j.validator.unique.class: id009\Neo4jBundle\Validator\UniqueEntityValidator
+  id009_neo4j.entity_manager.class: id009\Neo4jBundle\EntityManager
+  id009_neo4j.proxy_dir: %kernel.cache_dir%/doctrine/neo4j/Proxies
+  id009_neo4j.form.type.neo4j_entity.class: id009\Neo4jBundle\Form\Type\EntityType
+  id009_neo4j.form.type_guesser.class: id009\Neo4jBundle\Form\Neo4jTypeGuesser
+  id009_neo4j.validator.unique.class: id009\Neo4jBundle\Validator\UniqueEntityValidator
 
 services:
-	id009_neo4j.entity_manager:
-		class: %id009_neo4j.entity_manager.class%
-		arguments: [%id009_neo4j.server.host%, %id009_neo4j.server.port%, %id009_neo4j.proxy_dir%, %id009_neo4j.server.username%, %id009_neo4j.server.password%]
+  id009_neo4j.entity_manager:
+    class: %id009_neo4j.entity_manager.class%
+    arguments: [%id009_neo4j.server.host%, %id009_neo4j.server.port%, %id009_neo4j.proxy_dir%, %id009_neo4j.server.username%, %id009_neo4j.server.password%]
 
-	id009_neo4j.form.type.neo4j_entity:
-		class: %id009_neo4j.form.type.neo4j_entity.class%
-		tags:
-			- {name: form.type, alias: neo4j_entity}
-		arguments: [@id009_neo4j.entity_manager]
+  id009_neo4j.form.type.neo4j_entity:
+    class: %id009_neo4j.form.type.neo4j_entity.class%
+    tags:
+      - {name: form.type, alias: neo4j_entity}
+    arguments: [@id009_neo4j.entity_manager]
 
-	id009_neo4j.form.type_guesser:
-		class: %id009_neo4j.form.type_guesser.class%
-		tags:
-			- {name: form.type_guesser}
-		arguments: [@id009_neo4j.entity_manager]
+  id009_neo4j.form.type_guesser:
+    class: %id009_neo4j.form.type_guesser.class%
+    tags:
+      - {name: form.type_guesser}
+    arguments: [@id009_neo4j.entity_manager]
 
-	id009_neo4j.validator.unique:
-		class: %id009_neo4j.validator.unique.class%
-		tags:
-			- {name: validator.constraint_validator, alias: id009_neo4j.unique}
-		arguments: [@id009_neo4j.entity_manager]
+  id009_neo4j.validator.unique:
+    class: %id009_neo4j.validator.unique.class%
+    tags:
+      - {name: validator.constraint_validator, alias: id009_neo4j.unique}
+    arguments: [@id009_neo4j.entity_manager]
