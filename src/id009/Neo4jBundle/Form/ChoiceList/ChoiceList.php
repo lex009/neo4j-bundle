@@ -146,11 +146,16 @@ class ChoiceList extends ObjectChoiceList
 	{
 		if ($this->entityLoader)
 			$entities = $this->entityLoader->getEntities();
-		else 
-			$entities = $this->entityManager->createCypherQuery()
-				->startWithQuery('entities', $this->class, 'id:*')
-    			->end('entities')
-    			->getList();
+		else {
+			try{
+				$entities = $this->entityManager->createCypherQuery()
+					->startWithQuery('entities', $this->class, 'id:*')
+	    			->end('entities')
+	    			->getList();
+	    	} catch (\Exception $e){
+	    		$entities = array();
+	    	}
+    	}
 
 		parent::initialize($entities, array(), $this->preferredEntities);
 
