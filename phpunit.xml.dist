@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false"
+         bootstrap="src/id009/Neo4jBundle/Tests/bootstrap.php"
+>
+    <testsuites>
+        <testsuite name="Neo4jBundle for the Symfony Framework">
+            <directory>src/*/*/Tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <groups>
+        <exclude>
+            <group>benchmark</group>
+        </exclude>
+    </groups>
+
+    <filter>
+        <whitelist>
+            <directory>./src</directory>
+            <exclude>
+                <directory>lib/*/*/Resources</directory>
+                <directory>lib/*/*/Tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
