@@ -3,6 +3,7 @@ namespace id009\Neo4jBundle\Form;
 
 use Symfony\Component\Form\FormTypeGuesserInterface;
 use Symfony\Component\Form\Guess\TypeGuess;
+use Symfony\Component\Form\Guess\ValueGuess;
 use Symfony\Component\Form\Guess\Guess;
 use HireVoice\Neo4j\EntityManager;
 
@@ -80,7 +81,7 @@ class Neo4jTypeGuesser implements FormTypeGuesserInterface
 			return new ValueGuess(false, Guess::LOW_CONFIDENCE);
 		}
 
-		return new ValuesGuess(true, Guess::LOW_CONFIDENCE);
+		return new ValueGuess(true, Guess::LOW_CONFIDENCE);
 	}
 
 	public function guessMaxLength($class, $property)
