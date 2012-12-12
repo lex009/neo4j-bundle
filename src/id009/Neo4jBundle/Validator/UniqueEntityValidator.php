@@ -57,10 +57,14 @@ class UniqueEntityValidator extends ConstraintValidator
         	if ($property->isRelation() || $property->isRelationList())
         		throw new ConstraintDefinitionException(sprintf("The field '%s' has a relation, so it cannot be validated for uniqueness currently.", $fieldName));
 
-        	$criteria[$fieldName] = $property->getValue($entity);
+            if (null !== $property->getValue($entity))
+        	   $criteria[$fieldName] = $property->getValue($entity);
         }
 
-        $result = $repository->findBy($criteria);
+        $result = array();
+
+        if (count($criteria) > 0)
+            $result = $repository->findBy($criteria);
 
         if (0 === count($result)) return;
 

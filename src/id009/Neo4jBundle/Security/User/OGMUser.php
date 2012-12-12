@@ -31,7 +31,7 @@ class OGMUser implements UserInterface
 	private $salt;
 
 	/**
-     * @OGM\Property
+     * @OGM\Property(format = "array")
      */
 	private $roles;
 
@@ -73,6 +73,16 @@ class OGMUser implements UserInterface
 		$this->roles = $roles;
 	}
 
+	public function addRole($role)
+	{
+		$this->roles[] = $role;
+	}
+
+	public function removeRole($role)
+	{
+		$this->roles = array_diff($this->roles, array($role));
+	}
+
 	public function getPassword()
 	{
 		return $this->password;
@@ -96,18 +106,5 @@ class OGMUser implements UserInterface
 	public function eraseCredentials()
 	{
 
-	}
-
-	public function equals(UserInterface $user)
-	{
-		if (!$user instanceof User) return false;
-
-		if ($this->password !== $user->getPassword()) return false;
-
-		if ($this->salt !== $user->getSalt()) return false;
-
-		if ($this->username != $user->getUsername()) return false;
-
-		return true;
 	}
 }

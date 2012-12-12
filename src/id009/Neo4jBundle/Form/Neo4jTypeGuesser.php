@@ -58,6 +58,17 @@ class Neo4jTypeGuesser implements FormTypeGuesserInterface
 			}
 		}
 
+		/*
+		foreach ($properties as $p){
+			if ($p->getName() == $property){
+				if ($p->getFormat() == 'array'){
+					$choice = true;
+					$multiple = true;
+				}
+			}
+		}
+		*/
+		
 		if ($choice)
 		{
 			return new TypeGuess(
