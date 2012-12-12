@@ -7,7 +7,7 @@ use HireVoice\Neo4j\Annotation as OGM;
 /**
  * @OGM\Entity
  */
-class OGMUser implements UserInterface
+class OGMUser implements UserInterface, \Serializable
 {
 	/**
      * @OGM\Auto
@@ -107,4 +107,23 @@ class OGMUser implements UserInterface
 	{
 
 	}
+
+	public function __wakeup(){
+		$this->id = $this->getId();
+	}
+
+	public function serialize()
+	{
+		return serialize(array(
+			'id' => $this->getId(),
+			'roles' => $this->getRoles()
+		));
+	}
+
+	 public function unserialize($data) {
+	 	 $data = unserialize($data);
+	 	 
+	 	 $this->id = $data['id'];
+	 	 $this->roles = $data['roles'];
+	 }
 }

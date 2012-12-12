@@ -26,6 +26,7 @@ class id009Neo4jExtension extends Extension
         $container->setParameter('id009_neo4j.server.port', $config['port']);
         $container->setParameter('id009_neo4j.server.username', $config['username']);
         $container->setParameter('id009_neo4j.server.password', $config['password']);
+        $container->setParameter('id009_neo4j.secutiry.user_class', $config['user_class']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');

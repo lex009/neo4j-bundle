@@ -4,6 +4,7 @@ parameters:
   id009_neo4j.form.type.neo4j_entity.class: id009\Neo4jBundle\Form\Type\EntityType
   id009_neo4j.form.type_guesser.class: id009\Neo4jBundle\Form\Neo4jTypeGuesser
   id009_neo4j.validator.unique.class: id009\Neo4jBundle\Validator\UniqueEntityValidator
+  id009_neo4j.security.provider.class: id009\Neo4jBundle\Security\User\OGMUserProvider
 
 services:
   id009_neo4j.entity_manager:
@@ -27,3 +28,7 @@ services:
     tags:
       - {name: validator.constraint_validator, alias: id009_neo4j.unique}
     arguments: [@id009_neo4j.entity_manager]
+  
+  id009_neo4j.security.provider:
+    class: %id009_neo4j.security.provider.class%
+    arguments: [@id009_neo4j.entity_manager, %id009_neo4j.secutiry.user_class%]

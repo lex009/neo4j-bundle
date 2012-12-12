@@ -34,6 +34,9 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('password')
                     ->defaultNull()
                 ->end()
+                ->scalarNode('user_class')
+                    ->defaultNull()
+                ->end()
             ->end();
 
         return $treeBuilder;
