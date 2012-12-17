@@ -108,10 +108,6 @@ class OGMUser implements UserInterface, \Serializable
 
 	}
 
-	public function __wakeup(){
-		$this->id = $this->getId();
-	}
-
 	public function serialize()
 	{
 		return serialize(array(

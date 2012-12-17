@@ -37,6 +37,12 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('user_class')
                     ->defaultNull()
                 ->end()
+                ->scalarNode('proxy_dir')
+                    ->defaultNull()
+                ->end()
+                ->scalarNode('debug')
+                    ->defaultFalse()
+                ->end()
             ->end();
 
         return $treeBuilder;
