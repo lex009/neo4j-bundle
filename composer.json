@@ -3,7 +3,7 @@
 	"description": "This bundle integrates Neo4j OGM library into Symfony with basic user provider and form integration",
 	"type": "symfony-bundle",
 	"keywords": ["neo4j", "ogm", "graph"],
-	"license": "MIT",
+	"license": "MIT", 
 	"authors": [
 		{
 			"name": "Alex Belyaev",
