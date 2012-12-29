@@ -39,6 +39,8 @@ class EntityType extends AbstractType
 
         $that = $this;
 
+        $entityManager = $this->entityManager;
+
 		$loader = function(Options $options) use ($that){
 			if (null !== $options['cypher'])
 				return new Neo4jCypherLoader($options['cypher'], $options['class'], $that->entityManager);
@@ -46,7 +48,7 @@ class EntityType extends AbstractType
 			return null;
 		};
 
-		$choiceList = function(Options $options) use (&$choiceListCache, &$time, $that){
+		$choiceList = function(Options $options) use (&$choiceListCache, &$time, $that, $entityManager){
 			$propertyHash = is_object($options['property']) ? spl_object_hash($options['property']) : $options['property'];
 
 			$choiceHashes = $options['choices'];
@@ -78,10 +80,9 @@ class EntityType extends AbstractType
                 $groupByHash
             )));
 
-
             if (!isset($choiceListCache[$hash])){
             	$choiceListCache[$hash] = new ChoiceList(
-            		$that->entityManager,
+            		$entityManager,
             		$options['class'],
             		$options['property'],
                     $options['loader'],
@@ -90,10 +91,6 @@ class EntityType extends AbstractType
                     $options['group_by']
             	);
             }
-
-            //$choiceListCache[$hash]->getValues();
-
-            //print_r($choiceListCache[$hash]->getChoices());
 
             return $choiceListCache[$hash];
 		};
