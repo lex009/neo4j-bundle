@@ -1,2 +1,5 @@
+vendor/
+bootstrap.php
+composer.phar
+composer.lock
 .DS_Store
-.MD

@@ -13,7 +13,8 @@ class Neo4jTypeGuesserTest extends TestCase
 	{
 		$entity = new EntityGuessType();
 
-		$typeGuesser = new Neo4jTypeGuesser($this::getEntityManager());
+		$em = TestCase::getEntityManager();
+		$typeGuesser = new Neo4jTypeGuesser($this->createRegistry($em));
 		
 		$guessedType1 = $typeGuesser->guessType('id009\Neo4jBundle\Tests\Fixtures\Form\EntityGuessType', 'manyToMany');
 		$guessedType2 = $typeGuesser->guessType('id009\Neo4jBundle\Tests\Fixtures\Form\EntityGuessType', 'manyToOne');

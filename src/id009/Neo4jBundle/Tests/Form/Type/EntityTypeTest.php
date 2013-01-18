@@ -12,9 +12,13 @@ class EntityTypeTest extends TypeTestCase
 {
 	protected $entityManager;
 
+	protected $registry;
+
 	public function setUp()
 	{
 		$this->entityManager = TestCase::getEntityManager();
+
+		$this->registry = $this->createRegistryMock($this->entityManager);
 
 		parent::setUp();
 	}
@@ -41,12 +45,13 @@ class EntityTypeTest extends TypeTestCase
 		$entity2 = new Entity();
 		$entity2->setName('Sergey');
 
-		$entityType = new EntityType($this->entityManager);
+		$entityType = new EntityType($this->registry);
 
 		$this->getEntities(array(&$entity1, &$entity2));
 
 		$field = $this->factory->createNamed('name', 'neo4j_entity', null, array(
 			'class' => 'id009\Neo4jBundle\Tests\Fixtures\Form\Entity',
+			'em' => 'default'
 		));
 
 		$this->assertEquals(array(
@@ -67,6 +72,7 @@ class EntityTypeTest extends TypeTestCase
 
 		$field = $this->factory->createNamed('name', 'neo4j_entity', null, array(
 			'class' => 'id009\Neo4jBundle\Tests\Fixtures\Form\Entity',
+			'em' => 'default',
 			'cypher' => function ($cypher){
 				$cypher
 				   ->startWithQuery('entities', 'id009\Neo4jBundle\Tests\Fixtures\Form\Entity', 'id:*')
@@ -93,6 +99,7 @@ class EntityTypeTest extends TypeTestCase
 		$this->getEntities(array(&$entity1, &$entity2));
 
 		$field = $this->factory->createNamed('name', 'neo4j_entity', null, array(
+			'em' => 'default',
 			'class' => 'id009\Neo4jBundle\Tests\Fixtures\Form\Entity',
 			'multiple' => true
 		));
@@ -106,7 +113,18 @@ class EntityTypeTest extends TypeTestCase
 	protected function getExtensions()
 	{
 		return array_merge(parent::getExtensions(), array(
-            new Neo4jExtension($this->entityManager),
+            new Neo4jExtension($this->registry),
         ));
+	}
+
+	protected function createRegistryMock($em, $name = 'default')
+	{
+		$registry = $this->getMock('id009\Neo4jBundle\ManagerRegistry', array('getManager'), array(array($name => $em), $name));
+		$registry->expects($this->any())
+				 ->method('getManager')
+				 ->with($this->equalTo($name))
+				 ->will($this->returnValue($em));
+
+		return $registry;
 	}
 }

@@ -5,7 +5,7 @@ use Symfony\Component\Form\FormTypeGuesserInterface;
 use Symfony\Component\Form\Guess\TypeGuess;
 use Symfony\Component\Form\Guess\ValueGuess;
 use Symfony\Component\Form\Guess\Guess;
-use HireVoice\Neo4j\EntityManager;
+use id009\Neo4jBundle\ManagerRegistry;
 
 /**
  * Tries to guess a form type according mapping information.
@@ -20,9 +20,9 @@ class Neo4jTypeGuesser implements FormTypeGuesserInterface
 	 */
 	private $entityManager;
 
-	public function __construct(EntityManager $entityManager)
+	public function __construct(ManagerRegistry $managerRegistry)
 	{
-		$this->entityManager = $entityManager;
+		$this->entityManager = $managerRegistry->getManager();
 	}
 
 	public function guessType($class, $property)
@@ -49,7 +49,6 @@ class Neo4jTypeGuesser implements FormTypeGuesserInterface
 			}
 		}
 
-
 		foreach ($manyToOneRelations as $p){
 			if ($p->getName() == $property){
 				$multiple = false;
@@ -57,17 +56,6 @@ class Neo4jTypeGuesser implements FormTypeGuesserInterface
 				break;
 			}
 		}
-
-		/*
-		foreach ($properties as $p){
-			if ($p->getName() == $property){
-				if ($p->getFormat() == 'array'){
-					$choice = true;
-					$multiple = true;
-				}
-			}
-		}
-		*/
 		
 		if ($choice)
 		{
@@ -87,12 +75,18 @@ class Neo4jTypeGuesser implements FormTypeGuesserInterface
 	public function guessRequired($class, $property)
 	{
 		try{
-			$meta = $this->entityManager->getRepository($class);
+			$meta = $this->entityManager->getRepository($class)->getMeta();
+			$properties = $meta->getProperties();
+			foreach ($properties as $prop){
+				if ($prop->getName() == $property){
+					return new ValueGuess(true, Guess::LOW_CONFIDENCE);
+				}
+			}
+
+			return new ValueGuess(false, Guess::LOW_CONFIDENCE);
 		} catch (\Exception $e){
 			return new ValueGuess(false, Guess::LOW_CONFIDENCE);
 		}
-
-		return new ValueGuess(true, Guess::LOW_CONFIDENCE);
 	}
 
 	public function guessMaxLength($class, $property)

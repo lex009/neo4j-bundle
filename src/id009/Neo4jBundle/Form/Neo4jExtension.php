@@ -2,7 +2,7 @@
 namespace id009\Neo4jBundle\Form;
 
 use Symfony\Component\Form\AbstractExtension;
-use HireVoice\Neo4j\EntityManager;
+use id009\Neo4jBundle\ManagerRegistry;
 
 /**
  * Form extension
@@ -11,20 +11,20 @@ use HireVoice\Neo4j\EntityManager;
  */
 class Neo4jExtension extends AbstractExtension
 {
-	private $entityManager;
+	private $managerRegistry;
 
-	public function __construct(EntityManager $entityManager)
+	public function __construct(ManagerRegistry $managerRegistry)
 	{
-		$this->entityManager = $entityManager;
+		$this->managerRegistry = $managerRegistry;
 	}
 
 	protected function loadTypes()
 	{
-		return array(new Type\EntityType($this->entityManager));
+		return array(new Type\EntityType($this->managerRegistry));
 	}
 
 	protected function loadTypeGuesser()
 	{
-		return new Neo4jTypeGuesser($this->entityManager);
+		return new Neo4jTypeGuesser($this->managerRegistry);
 	}
 }

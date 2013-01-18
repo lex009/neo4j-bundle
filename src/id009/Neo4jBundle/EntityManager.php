@@ -13,18 +13,6 @@ use HireVoice\Neo4j\Exception;
  */
 class EntityManager extends BaseEntityManager
 {
-	public function __construct($host, $port, $proxyDir, $username = null, $password = null, $debug = false)
-	{
-		parent::__construct(new Configuration(array(
-			'host'      => $host,
-			'port'      => $port,
-			'proxy_dir' => $proxyDir,
-			'username'  => $username,
-			'password'  => $password,
-			'debug'     => $debug,
-		)));
-	}
-
 	public function addSubscriber(EventSubscriberInterface $subscriber)
 	{
 		$events = $subscriber::getSubscribedEvents();

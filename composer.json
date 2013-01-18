@@ -12,8 +12,9 @@
 	],
 	"require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": ">=2.1",
-        "hirevoice/neo4jphp-ogm": "dev-master"
+        "symfony/symfony": "=2.1",
+        "hirevoice/neo4jphp-ogm": "dev-master",
+        "everyman/neo4jphp": "dev-master"
     },
     "autoload": {
     	"psr-0": {

@@ -3,7 +3,7 @@ namespace id009\Neo4jBundle\Form\Type;
 
 use id009\Neo4jBundle\Form\ChoiceList\Neo4jCypherLoader;
 use id009\Neo4jBundle\Form\ChoiceList\ChoiceList;
-use HireVoice\Neo4j\EntityManager;
+use id009\Neo4jBundle\ManagerRegistry;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\DataTransformer\CollectionToArrayTransformer;
@@ -19,11 +19,11 @@ class EntityType extends AbstractType
 {
 	private $choiceListCache = array();
 
-	private $entityManager;
+	private $managerRegistry;
 
-	public function __construct(EntityManager $entityManager)
+	public function __construct(ManagerRegistry $managerRegistry)
 	{
-		$this->entityManager = $entityManager;
+		$this->managerRegistry = $managerRegistry;
 	}
 
 	public function buildForm(FormBuilderInterface $builder, array $options)
@@ -39,16 +39,16 @@ class EntityType extends AbstractType
 
         $that = $this;
 
-        $entityManager = $this->entityManager;
+        $managerRegistry = $this->managerRegistry;
 
-		$loader = function(Options $options) use ($that){
+		$loader = function(Options $options){
 			if (null !== $options['cypher'])
-				return new Neo4jCypherLoader($options['cypher'], $options['class'], $that->entityManager);
+				return new Neo4jCypherLoader($options['cypher'], $options['class'], $options['em']);
 
 			return null;
 		};
 
-		$choiceList = function(Options $options) use (&$choiceListCache, &$time, $that, $entityManager){
+		$choiceList = function(Options $options) use (&$choiceListCache, &$time){
 			$propertyHash = is_object($options['property']) ? spl_object_hash($options['property']) : $options['property'];
 
 			$choiceHashes = $options['choices'];
@@ -72,6 +72,7 @@ class EntityType extends AbstractType
             $groupByHash = is_object($options['group_by']) ? spl_object_hash($options['group_by']) : $options['group_by'];
 
             $hash = md5(json_encode(array(
+                spl_object_hash($options['em']),
                 $options['class'],
                 $propertyHash,
                 $loaderHash,
@@ -82,7 +83,7 @@ class EntityType extends AbstractType
 
             if (!isset($choiceListCache[$hash])){
             	$choiceListCache[$hash] = new ChoiceList(
-            		$entityManager,
+            		$options['em'],
             		$options['class'],
             		$options['property'],
                     $options['loader'],
@@ -97,15 +98,26 @@ class EntityType extends AbstractType
 
 
 		$resolver->setDefaults(array(
-			'property'    => null,
-			'cypher'      => null,
-			'loader'      => $loader,
-			'choices'     => null,
-            'choice_list' => $choiceList,
-            'group_by'    => null,
+            'em'             => null,
+			'property'       => null,
+			'cypher'         => null,
+			'loader'         => $loader,
+			'choices'        => null,
+            'choice_list'    => $choiceList,
+            'group_by'       => null,
 		));
 
+        $registry = $this->managerRegistry;
+
+        $emNormalizer = function (Options $options, $em) use ($managerRegistry){
+            return $managerRegistry->getManager($em);
+        };
+
 		$resolver->setRequired(array('class'));
+
+        $resolver->setNormalizers(array(
+            'em' => $emNormalizer,
+        ));
 	}
 
 	public function getParent()

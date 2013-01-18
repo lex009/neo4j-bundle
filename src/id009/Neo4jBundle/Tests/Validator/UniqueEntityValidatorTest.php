@@ -10,22 +10,36 @@ use Symfony\Component\Validator\Validator;
 
 class UniqueEntityValidatorTest extends TestCase
 {
+	protected $em;
+
+	protected $registry;
+
+	public function setUp(){
+
+		$em = $this::getEntityManager();
+
+		$this->em = $em;
+		
+		$this->registry = $this->createRegistry($em, 'default');
+		
+		parent::setUp();
+	}
+
 	public function testValidateUniqueness()
 	{
-		$em = $this::getEntityManager();
-		$entity1 = $em->getRepository('id009\Neo4jBundle\Tests\Fixtures\Form\Entity')->findOneByName('Alexsey');
+		$entity1 = $this->em->getRepository('id009\Neo4jBundle\Tests\Fixtures\Form\Entity')->findOneByName('Alexsey');
 		if (!$entity1){
 			$entity1 = new Entity();
 			$entity1->setName('Alexsey');
 
-			$em->persist($entity1);
-			$em->flush();
+			$this->em->persist($entity1);
+			$this->em->flush();
 		}
 
 		$entity2 = new Entity();
 		$entity2->setName('Alexsey');
 
-		$validator = $this->createValidator($em, array('name'));
+		$validator = $this->createValidator($this->registry, array('name'));
 		$violationsList = $validator->validate($entity2);
 
 		$this->assertEquals(1, $violationsList->count());
@@ -43,8 +57,7 @@ class UniqueEntityValidatorTest extends TestCase
      */
 	public function testManyToManyException()
 	{
-		$em = $this::getEntityManager();
-		$validator = $this->createValidator($em, array('many'));
+		$validator = $this->createValidator($this->registry, array('many'));
 
 		$entity = new Entity();
 
@@ -73,13 +86,14 @@ class UniqueEntityValidatorTest extends TestCase
         return $validatorFactory;
     }
 
-    private function createValidator($em, $fields)
+    private function createValidator($registry, $fields)
     {
-    	$validator = new UniqueEntityValidator($em);
+    	$validator = new UniqueEntityValidator($this->registry);
 
     	$metadata = new ClassMetadata('id009\Neo4jBundle\Tests\Fixtures\EntityToValidate');
     	$constraint = new Unique(array(
-			'fields' => $fields
+			'fields' => $fields,
+			'em' => 'default',
 		));
 		$metadata->addConstraint($constraint);
 

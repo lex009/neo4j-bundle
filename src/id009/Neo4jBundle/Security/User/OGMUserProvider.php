@@ -5,7 +5,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use HireVoice\Neo4j\EntityManager;
+use id009\Neo4jBundle\ManagerRegistry;
 
 /**
  * User provider for OGM entities
@@ -22,15 +22,15 @@ class OGMUserProvider implements UserProviderInterface
 
 	private $repository;
 
-	public function __construct(EntityManager $entityManager, $class, $property = null)
+	public function __construct(ManagerRegistry $managerRegistry, $class, $property = null, $manager = null)
 	{
-		$this->entityManager = $entityManager;
+		$this->entityManager = $managerRegistry->getManager($manager);
 
 		$this->class = $class;
 
 		$this->property = $property;
 
-		$this->repository = $entityManager->getRepository($class);
+		$this->repository = $this->entityManager->getRepository($class);
 	}
 
 	public function loadUserByUsername($username)

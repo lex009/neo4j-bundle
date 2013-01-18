@@ -15,16 +15,21 @@ class EventManagerPass implements CompilerPassInterface
 {
 	public function process(ContainerBuilder $container)
 	{
-		if (!$container->hasDefinition('id009_neo4j.entity_manager')){
-			return;
-		}
-
-		$definition = $container->getDefinition('id009_neo4j.entity_manager');
-
 		$subscribers = $container->findTaggedServiceIds('id009_neo4j.subscriber');
 
-		foreach ($subscribers as $id => $attributes){
-			$definition->addMethodCall('addSubscriber', array(new Reference($id)));
+		foreach ($subscribers as $id => $tagAttributes){
+			foreach ($tagAttributes as $attributes){
+				if (!isset($attributes['manager'])) $attributes['manager'] = $container->getParameter('id009_neo4j.default_entity_manager_name');
+				echo $attributes['manager'];
+				if (!$container->hasDefinition($attributes['manager'])){
+					continue;
+				} else {
+					
+					$definition = $container->getDefinition($attributes['manager']);
+				}
+
+				$definition->addMethodCall('addSubscriber', array(new Reference($id)));
+			}
 		}
 	}
 }

@@ -37,7 +37,11 @@
       					<b>{{ event.name }}</b><br/>
       					{% if event.time is defined %}
       						Time: {{ event.time }}
-      					{% endif %} 
+      					{% endif %} <br/>
+                {% if event.query is defined%}
+                  Query: {{ event.query }}
+                {% endif %}
+
       				</div>
       			</li>
       		{% endfor %}

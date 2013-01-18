@@ -7,13 +7,25 @@ use id009\Neo4jBundle\Security\User\OGMUserProvider;
 
 class OGMUserProviderTest extends TestCase
 {
+	protected $registry;
+
+	protected $em;
+
+	public function setUp()
+	{
+		$this->em = $this::getEntityManager();
+
+		$this->registry = $this->createRegistry($this->em, 'default');
+
+		parent::setUp();
+	}
+
+
 	public function testLoadUserByUsername()
 	{
-		$em = $this::getEntityManager();
+		$user = $this->getUser($this->em);
 
-		$user = $this->getUser($em);
-
-		$provider = new OGMUserProvider($em, 'id009\Neo4jBundle\Security\User\OGMUser', 'username');
+		$provider = new OGMUserProvider($this->registry, 'id009\Neo4jBundle\Security\User\OGMUser', 'username', 'default');
 		
 		$loadedUser = $provider->loadUserByUsername('testuser');
 
@@ -24,11 +36,11 @@ class OGMUserProviderTest extends TestCase
 	{
 		$em = $this::getEntityManager();
 
-		$user = $this->getUser($em);
+		$user = $this->getUser($this->em);
 
 		$user->setUsername('testuser1');
 
-		$provider = new OGMUserProvider($em, 'id009\Neo4jBundle\Security\User\OGMUser', 'username');
+		$provider = new OGMUserProvider($this->registry, 'id009\Neo4jBundle\Security\User\OGMUser', 'username', 'default');
 		
 		$refreshedUser = $provider->refreshUser($user);
 
@@ -44,7 +56,7 @@ class OGMUserProviderTest extends TestCase
 
 		$user = new OGMUser('testuser', 'testpass');
 
-		$provider = new OGMUserProvider($em, 'id009\Neo4jBundle\Security\User\OGMUser', 'username');
+		$provider = new OGMUserProvider($this->registry, 'id009\Neo4jBundle\Security\User\OGMUser', 'username');
 		
 		$refreshedUser = $provider->refreshUser($user);
 	}

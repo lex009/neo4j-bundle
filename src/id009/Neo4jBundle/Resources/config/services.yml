@@ -1,4 +1,5 @@
 parameters:
+  id009_neo4j.class: id009\Neo4jBundle\ManagerRegistry
   id009_neo4j.entity_manager.class: id009\Neo4jBundle\EntityManager
   id009_neo4j.form.type.neo4j_entity.class: id009\Neo4jBundle\Form\Type\EntityType
   id009_neo4j.form.type_guesser.class: id009\Neo4jBundle\Form\Neo4jTypeGuesser
@@ -6,38 +7,40 @@ parameters:
   id009_neo4j.security.provider.class: id009\Neo4jBundle\Security\User\OGMUserProvider
   id009_neo4j.data_collector.class: id009\Neo4jBundle\DataCollector\DataCollector
   id009_neo4j.event.data_collector.class: id009\Neo4jBundle\Event\DataCollectorSubscriber
+  id009_neo4j.configuration.class: HireVoice\Neo4j\Configuration
 
 services:
-  id009_neo4j.entity_manager:
-    class: %id009_neo4j.entity_manager.class%
-    arguments: [%id009_neo4j.server.host%, %id009_neo4j.server.port%, %id009_neo4j.proxy_dir%, %id009_neo4j.server.username%, %id009_neo4j.server.password%, %id009_neo4j.debug%]
-
   id009_neo4j.form.type.neo4j_entity:
     class: %id009_neo4j.form.type.neo4j_entity.class%
     tags:
       - {name: form.type, alias: neo4j_entity}
-    arguments: [@id009_neo4j.entity_manager]
+    arguments: [@id009_neo4j]
 
   id009_neo4j.form.type_guesser:
     class: %id009_neo4j.form.type_guesser.class%
     tags:
       - {name: form.type_guesser}
-    arguments: [@id009_neo4j.entity_manager]
+    arguments: [@id009_neo4j]
 
   id009_neo4j.validator.unique:
     class: %id009_neo4j.validator.unique.class%
     tags:
       - {name: validator.constraint_validator, alias: id009_neo4j.unique}
-    arguments: [@id009_neo4j.entity_manager]
+    arguments: [@id009_neo4j]
 
   id009_neo4j.security.provider:
     class: %id009_neo4j.security.provider.class%
-    arguments: [@id009_neo4j.entity_manager, %id009_neo4j.secutiry.user_class%]
-
-  id009_neo4j.event.data_collector:
-    class: %id009_neo4j.event.data_collector.class%
+    public: false
+    abstract: true
+    arguments: [@id009_neo4j]
 
   id009_neo4j.data_collector:
     class:  %id009_neo4j.data_collector.class%
     tags:
       - {name: data_collector, template: "id009Neo4jBundle:Collector:neo4j.html.twig", id: "Neo4j"}
+
+  id009_neo4j:
+    class: %id009_neo4j.class%
+    arguments: [%id009_neo4j.entity_managers%, %id009_neo4j.default_entity_manager_name%]
+    calls:
+      - [ setContainer, [ @service_container ] ]

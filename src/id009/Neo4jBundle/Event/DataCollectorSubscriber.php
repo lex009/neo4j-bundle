@@ -32,7 +32,7 @@ class DataCollectorSubscriber extends AbstractSubscriber
 		$this->dataCollector->logEvent(array(
 			'name' => EntityManager::QUERY_RUN,
 			'time' => $time,
-			'query' => $query,
+			'query' => $query->getQuery(),
 			'parameters' => $parameters,
 		));
 	}

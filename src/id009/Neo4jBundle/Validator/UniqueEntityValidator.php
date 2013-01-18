@@ -5,7 +5,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
-use HireVoice\Neo4j\EntityManager;
+use id009\Neo4jBundle\ManagerRegistry;
 
 /**
  * Unique entity validator
@@ -15,13 +15,13 @@ use HireVoice\Neo4j\EntityManager;
 class UniqueEntityValidator extends ConstraintValidator
 {
 	/**
-	 * @var EntityManager
+	 * @var ManagerRegistry
 	 */
-	private $entityManager;
+	private $managerRegistry;
 
-	public function __construct(EntityManager $entityManager)
+	public function __construct(ManagerRegistry $managerRegistry)
 	{
-		$this->entityManager = $entityManager;
+		$this->managerRegistry = $managerRegistry;
 	}
 
 	public function validate($entity, Constraint $constraint)
@@ -41,8 +41,10 @@ class UniqueEntityValidator extends ConstraintValidator
         }
 
         $className = $this->context->getCurrentClass();
+
+        $entityManger = $this->managerRegistry->getManager($constraint->em);
         
-        $repository = $this->entityManager->getRepository($className);
+        $repository = $entityManger->getRepository($className);
         
         $meta = $repository->getMeta();
 
