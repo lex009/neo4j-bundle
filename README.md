@@ -62,7 +62,7 @@ If you have a deal with Doctrine ORM Bundle you'll see that basic usage of Neo4j
 ```php
 // Your controller...
 $em = $this->get('id009_neo4j.entity_manager');
-// Now you have instance of HireVoice\Neo4j\EntityManager class. You can do what ever you want with it.
+// Now you have an instance of HireVoice\Neo4j\EntityManager class. You can do whatever you want with it.
 $em->getRepository('Acme\AcmeBundle\Entity')->findOneByUsername('ivanpetrov99'); // and so on...
 ````
 
