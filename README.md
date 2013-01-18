@@ -137,7 +137,7 @@ OGM provides three types of events:
 
 Please refer to [HireVoice\Neo4j\EntityManager](https://github.com/lphuberdeau/Neo4j-PHP-OGM/blob/master/lib/HireVoice/Neo4j/EntityManager.php) for details on these events.
 
-If want to subscribe to these events you can create your own Subscriber class that implements `Symfony\Component\EventDispatcher\EventSubscriberInterface`. But for convenience the bundle has an abstract  class `id009\Neo4jBundle\Event\AbstractSubscriber` and you can inherit your subscribers from it. For example:
+If you want to subscribe on these events you can create your own Subscriber class that implements `Symfony\Component\EventDispatcher\EventSubscriberInterface`. But for convenience the bundle has an abstract  class `id009\Neo4jBundle\Event\AbstractSubscriber` and you can inherit your subscribers from it. For example:
 
 ```php
 namespace Acme\AcmeBundle\Event
