@@ -55,7 +55,7 @@ Now, after the bundle is installed and configured properly, you can start using 
 
 Basics
 ------
-Please refer to [Neo4j PHP Object Graph Mapper](https://github.com/lphuberdeau/Neo4j-PHP-OGM) readme to understand how OGM works.
+Please, refer to [Neo4j PHP Object Graph Mapper](https://github.com/lphuberdeau/Neo4j-PHP-OGM) readme to understand how OGM works.
 
 If you have a deal with Doctrine ORM Bundle you'll see that basic usage of Neo4j Bundle is pretty straightforward:
 
@@ -135,7 +135,7 @@ OGM provides three types of events:
 * Relation create
 * Query run
 
-Please refer to [HireVoice\Neo4j\EntityManager](https://github.com/lphuberdeau/Neo4j-PHP-OGM/blob/master/lib/HireVoice/Neo4j/EntityManager.php) for details on these events.
+Please, refer to [HireVoice\Neo4j\EntityManager](https://github.com/lphuberdeau/Neo4j-PHP-OGM/blob/master/lib/HireVoice/Neo4j/EntityManager.php) for details on these events.
 
 If you want to subscribe on these events you can create your own Subscriber class that implements `Symfony\Component\EventDispatcher\EventSubscriberInterface`. But for convenience the bundle has an abstract  class `id009\Neo4jBundle\Event\AbstractSubscriber`, and you can inherit your subscribers from it. For example:
 
