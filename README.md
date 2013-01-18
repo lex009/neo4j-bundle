@@ -176,7 +176,7 @@ If you have several entity manager within your project just add attribute `manag
 
 Contributors
 ------------
-Alex Belyaev @lex009
+Alex Belyaev [@lex009](https://github.com/lex009/neo4j-bundle)
 
 You are always welcome to contribute!
 
