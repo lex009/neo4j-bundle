@@ -5,6 +5,11 @@ use Doctrine\Common\Persistence\ManagerRegistry as ManagerRegistryInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Keeps entity managers
+ *
+ * @author Alex Belyaev <lex@alexbelyaev.com>
+ */
 class ManagerRegistry implements ManagerRegistryInterface, ContainerAwareInterface
 {
 	private $managers;

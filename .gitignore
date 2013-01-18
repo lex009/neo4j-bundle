@@ -2,4 +2,6 @@ vendor/
 bootstrap.php
 composer.phar
 composer.lock
+*.sublime-project
+*.sublime-workspace
 .DS_Store

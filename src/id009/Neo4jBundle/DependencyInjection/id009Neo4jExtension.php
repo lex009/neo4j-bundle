@@ -81,7 +81,7 @@ class id009Neo4jExtension extends Extension
         if (true === $manager['debug']){
             $subscriberServiceName = sprintf('id009_neo4j.event.%s_data_collector', $manager['name']);
             $subscriberDefinition = new Definition('%id009_neo4j.event.data_collector.class%');
-            $subscriberDefinition->addTag('id009_neo4j.subscriber', array('manager' => $managerServiceName));
+            $subscriberDefinition->addTag('id009_neo4j.subscriber', array('manager' => $manager['name']));
             $subscriberDefinition->addMethodCall('setCollector', array(new Reference('id009_neo4j.data_collector')));
             $container->setDefinition($subscriberServiceName, $subscriberDefinition);
         }

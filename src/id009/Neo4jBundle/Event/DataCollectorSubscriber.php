@@ -4,6 +4,11 @@ namespace id009\Neo4jBundle\Event;
 use id009\Neo4jBundle\DataCollector\DataCollector;
 use HireVoice\Neo4j\EntityManager;
 
+/**
+ * Subscriber for Data Collector
+ *
+ * @author Alex Belyaev <lex@alexbelyaev.com>
+ */
 class DataCollectorSubscriber extends AbstractSubscriber
 {
 	protected $dataCollector;
