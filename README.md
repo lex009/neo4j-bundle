@@ -119,7 +119,7 @@ public function buildForm(FormBuilderInterface $builder, array $options)
     //...
 
     $builder->add('city', null, array(
-        'class' => 'Acme\AcmeBundle\Entity\Person'
+        'class' => 'Acme\AcmeBundle\Entity\City'
     ));
 
     //...
